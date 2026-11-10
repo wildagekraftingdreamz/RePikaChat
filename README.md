@@ -176,6 +176,7 @@ the served page.
 | POST | `/api/model/probe` | List models from the configured local server |
 | DELETE | `/api/memory/:id` | Drop one memory |
 | GET | `/api/export` | Download the whole save file |
+| POST | `/api/history/clear` | Clear the transcript (keeps memories, persona and settings) |
 | POST | `/api/reset` | Erase memories and history (keeps model settings) |
 | POST | `/api/quit` | Stop the process |
 | GET | `/api/public` | Public profile JSON |

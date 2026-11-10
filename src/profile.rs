@@ -77,6 +77,7 @@ pub fn endpoints() -> Vec<Endpoint> {
         Endpoint { method: "POST", path: "/api/model/size", summary: "Estimate a model's memory need against this machine's RAM and VRAM.", token: true },
         Endpoint { method: "DELETE", path: "/api/memory/:id", summary: "Forget exactly one stored fact.", token: true },
         Endpoint { method: "GET", path: "/api/export", summary: "Download the entire save file.", token: false },
+        Endpoint { method: "POST", path: "/api/history/clear", summary: "Clear the transcript, keeping memories, persona and model settings.", token: true },
         Endpoint { method: "POST", path: "/api/reset", summary: "Erase memories and history, keeping model settings.", token: true },
         Endpoint { method: "POST", path: "/api/quit", summary: "Stop this RePikaChat process.", token: true },
         Endpoint { method: "GET", path: "/healthz", summary: "Liveness and engine status as JSON.", token: false },

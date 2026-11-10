@@ -211,6 +211,7 @@ async fn run(opts: Options) {
         .route("/api/model/size", post(api_model_size))
         .route("/api/export", get(api_export))
         .route("/api/memory/:id", delete(api_memory_delete))
+        .route("/api/history/clear", post(api_history_clear))
         .route("/api/reset", post(api_reset))
         .route("/api/quit", post(api_quit))
         .with_state(app)
@@ -821,6 +822,20 @@ async fn api_memory_delete(
     guard(&headers, &ctx)?;
     let mut s = app.lock().await;
     s.studio.memories.retain(|m| m.id != id);
+    s.save();
+    Ok(Json(s.view()))
+}
+
+/// Clears the transcript but keeps everything that makes the companion itself:
+/// learned memories, persona, traits, level and model settings.
+async fn api_history_clear(
+    State(app): State<App>,
+    Extension(ctx): Extension<Ctx>,
+    headers: HeaderMap,
+) -> Result<Json<View>, ApiErr> {
+    guard(&headers, &ctx)?;
+    let mut s = app.lock().await;
+    s.studio.history.clear();
     s.save();
     Ok(Json(s.view()))
 }

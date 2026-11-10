@@ -629,6 +629,23 @@
     }
   }
 
+  async function clearHistory() {
+    const name = state.companion.name;
+    const sure = window.confirm(
+      `Clear the conversation with ${name}?\n\nThe transcript is erased. What ${name} has learned about you, its personality, level and your model settings stay. This cannot be undone.`,
+    );
+    if (!sure) return;
+    try {
+      const view = await api('/api/history/clear', { method: 'POST' });
+      engineWarn = null;
+      lastLearned = [];
+      render(view);
+      toast(`Transcript cleared. ${name} still remembers what you shared.`);
+    } catch (e) {
+      toast(e.message, 'bad');
+    }
+  }
+
   async function resetEverything() {
     const sure = window.confirm('Erase every memory, the transcript and the persona? Model settings are kept. This cannot be undone.');
     if (!sure) return;
@@ -764,6 +781,7 @@
       if (btn) pickModel(btn.dataset.model);
     });
     $('modelName').addEventListener('input', updateModelFit);
+    $('clearHistoryBtn').addEventListener('click', clearHistory);
     $('resetBtn').addEventListener('click', resetEverything);
     $('quitBtn').addEventListener('click', quitApp);
     $('exportBtn').addEventListener('click', () => { window.location.href = '/api/export'; });

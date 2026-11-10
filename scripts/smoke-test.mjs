@@ -100,6 +100,33 @@ async function main() {
     check('delete removes exactly that memory', true, 'no memory left to delete');
   }
 
+  await request('/api/chat', { method: 'POST', body: { text: 'my name is Ada' } });
+  const preClear = await request('/api/state');
+  check(
+    'a fact is learned before clearing',
+    preClear.json.memories.some((m) => m.value === 'Ada'),
+    JSON.stringify(preClear.json.memories.map((m) => m.value)),
+  );
+  const cleared = await request('/api/history/clear', { method: 'POST' });
+  check(
+    'clear history empties the transcript',
+    cleared.status === 200 && cleared.json.history.length === 0,
+    cleared.status === 200 ? `${cleared.json.history.length} messages left` : `status ${cleared.status}`,
+  );
+  check(
+    'clear history keeps the learned memories',
+    cleared.json.memories.length === preClear.json.memories.length &&
+      cleared.json.memories.some((m) => m.value === 'Ada'),
+    `${preClear.json.memories.length} → ${cleared.json.memories.length}`,
+  );
+  check(
+    'clear history keeps the companion and settings',
+    cleared.json.companion.name === preClear.json.companion.name &&
+      cleared.json.companion.level === preClear.json.companion.level &&
+      cleared.json.settings.model === preClear.json.settings.model,
+    `${cleared.json.companion.name} level ${cleared.json.companion.level}`,
+  );
+
   const remote = await request('/api/settings', {
     method: 'POST',
     body: { provider: 'ollama', endpoint: 'http://192.168.0.10:11434', model: 'llama3.2' },
