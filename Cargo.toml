@@ -1,0 +1,21 @@
+[package]
+name = "repikachat"
+version = "0.1.0"
+edition = "2021"
+description = "RePikaChat - a standalone Replika-style companion chat, with a local learning memory and optional local LLM"
+license = "MIT"
+
+[[bin]]
+name = "RePikaChat"
+path = "src/main.rs"
+
+[dependencies]
+axum = "0.7"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util", "time", "sync"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true
