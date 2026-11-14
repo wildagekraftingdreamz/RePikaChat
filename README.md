@@ -13,7 +13,7 @@ sentences to a local language model while keeping the memory and guardrails
 in Rust.
 
 ```bash
-cd D:\SoulApps\RepikaChat
+cd RePikaChat
 cargo run --release
 # open http://127.0.0.1:7719/
 ```
