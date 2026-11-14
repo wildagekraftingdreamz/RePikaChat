@@ -1,5 +1,7 @@
 # RePikaChat
 
+[![CI](https://github.com/wildagekraftingdreamz/RePikaChat/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/wildagekraftingdreamz/RePikaChat/actions/workflows/ci.yml)
+
 A standalone AI companion chat in Rust: one consumer, one bot, one local JSON
 file, and a chat engine that learns from what you tell it.
 
