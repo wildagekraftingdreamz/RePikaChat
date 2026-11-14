@@ -52,3 +52,55 @@ jobs:
           done
           curl -fsS "http://127.0.0.1:7720/healthz" >/dev/null
           REPIKACHAT_BASE=http://127.0.0.1:7720 node scripts/smoke-test.mjs
+
+  windows:
+    name: Windows checks
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Cargo tests
+        run: cargo test --locked
+
+      - name: Web syntax check
+        run: node --check web/app.js
+
+      - name: Build binary
+        run: cargo build --locked
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          export REPIKACHAT_PORT=7720
+          export REPIKACHAT_DATA="$RUNNER_TEMP/repikachat-smoke.json"
+          export REPIKACHAT_NO_OPEN=1
+          ./target/debug/RePikaChat.exe &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          for _ in $(seq 1 60); do
+            curl -fsS "http://127.0.0.1:7720/healthz" >/dev/null 2>&1 && break
+            sleep 1
+          done
+          curl -fsS "http://127.0.0.1:7720/healthz" >/dev/null
+          REPIKACHAT_BASE=http://127.0.0.1:7720 node scripts/smoke-test.mjs
+
+      # The self-installer is Windows-only code that no other job can reach.
+      - name: Self-installer
+        run: |
+          set -euo pipefail
+          ./target/debug/RePikaChat.exe --install
+          installed="$LOCALAPPDATA/Programs/RePikaChat"
+          test -f "$installed/RePikaChat.exe"
+          test -f "$installed/Uninstall.cmd"
+          echo "installed binary and uninstaller present"
