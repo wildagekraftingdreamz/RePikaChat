@@ -221,3 +221,5 @@ node scripts/smoke-test.mjs        # against a running instance on port 7719
 ```
 
 MIT licensed. Replika is a product of Luka, Inc.; this project is independent.
+
+<!-- temporary probe: verifies the pull_request trigger -->
