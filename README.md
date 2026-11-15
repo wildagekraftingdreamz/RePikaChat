@@ -18,6 +18,11 @@ cargo run --release
 # open http://127.0.0.1:7719/
 ```
 
+On Windows, `start.bat` does the same from a double-click: it builds a release
+binary if one is missing, prints the URL and save path (honouring
+`REPIKACHAT_PORT`), opens the running app instead of failing when the port is
+already busy, and keeps its window open while the server runs.
+
 ## Install
 
 Windows, per-user, no administrator rights:

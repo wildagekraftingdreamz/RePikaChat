@@ -2,7 +2,9 @@
 setlocal
 cd /d "%~dp0"
 
-set "PORT=7719"
+rem Honour REPIKACHAT_PORT so the URL and the port check match the server.
+set "PORT=%REPIKACHAT_PORT%"
+if "%PORT%"=="" set "PORT=7719"
 set "URL=http://127.0.0.1:%PORT%/"
 set "EXE=target\release\RePikaChat.exe"
 
@@ -33,7 +35,7 @@ if not exist "%EXE%" (
   echo.
 )
 
-echo   Starting the server. Leave this window open while you chat;
+echo   Starting the server on port %PORT%. Leave this window open while you chat;
 echo   press Ctrl+C to stop it.
 echo.
 
